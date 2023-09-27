@@ -1,0 +1,8 @@
+// Override default variables before the import
+$body-bg: #3a3a3a;
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+@include color-mode(light) {
+  // CSS variable overrides here...
+}
