@@ -1,9 +1,9 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import AboutMe from './AboutMe.js'
+import AboutMe from './AboutMePage/AboutMe.js'
 import NavigationBar from "./Navigation/NavBar";
-import Education from "./Education";
-import Experience from "./Experience";
-import Skills from "./Skills";
+import Education from "./EducationPage/Education";
+import Experience from "./ExperiencePage/Experience";
+import Skills from "./SkillsPage/Skills";
 
 const App = () => {
     return (

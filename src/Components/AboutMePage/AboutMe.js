@@ -1,5 +1,5 @@
 import {Col, Container, Row, Image} from "react-bootstrap";
-import foto from '../StaticFiles/foto.jpg'
+import foto from '../../StaticFiles/foto.jpg'
 const AboutMe = () => {
     return (
         <Container>
