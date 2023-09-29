@@ -76,7 +76,7 @@ export const userData = [
             telephone: '+42190011223456',
             address: 'Bratislava III., 09598 Bratislava III., Slovenská republika'
         },
-        about: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare eget tortor at scelerisque. Aenean id ex non elit vulputate porta. Sed lacus quam, sodales ac lobortis id, gravida ac nibh.a ut urna.',
+        about: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ornare eget tortor at scelerisque. Aenean id ex noeen elit vulputate porta. Sed lacus quam, sodales ac lobortis id, gravida ac nibh.a ut urna.',
         education: [
             {
                 schoolName: 'Gymnázium Kukučínová, Poprad',
