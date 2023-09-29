@@ -8,14 +8,14 @@ import {CvContextProvider} from "../Helpers/CvContext";
 
 const App = () => {
     return (
-        <BrowserRouter basename={"/"}>
+        <BrowserRouter basename={"/cv"}>
             <CvContextProvider>
             <NavigationBar/>
             <Routes>
-                <Route path="/" element={<AboutMe/>}/>
-                <Route path="/vzdelanie" element={<Education/>}/>
-                <Route path="/skusenosti" element={<Experience/>}/>
-                <Route path="/znalosti" element={<Skills/>}/>
+                <Route path="/cv" element={<AboutMe/>}/>
+                <Route path="/cv/vzdelanie" element={<Education/>}/>
+                <Route path="/cv/skusenosti" element={<Experience/>}/>
+                <Route path="/cv/znalosti" element={<Skills/>}/>
             </Routes>
             </CvContextProvider>
         </BrowserRouter>

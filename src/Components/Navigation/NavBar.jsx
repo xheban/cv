@@ -27,11 +27,11 @@ const NavigationBar = () =>{
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto" variant="underline"
                          activeKey={window.location.pathname}
-                         defaultActiveKey={"/"}>
-                        <NavLink href="/" >O mne</NavLink>
-                        <NavLink href="/vzdelanieeee" > Vzdelanieee</NavLink>
-                        <NavLink href="/skusenosti"> Pracovné skúsenosti</NavLink>
-                        <NavLink href="/znalosti" > Znalosti</NavLink>
+                         defaultActiveKey={"/cv"}>
+                        <NavLink href="/cv" >O mne</NavLink>
+                        <NavLink href="/cv/vzdelanieeee" > Vzdelanieee</NavLink>
+                        <NavLink href="/cv/skusenosti"> Pracovné skúsenosti</NavLink>
+                        <NavLink href="/cv/znalosti" > Znalosti</NavLink>
                     </Nav>
                     <Nav className="ms-auto" variant="underline">
                         <NavDropdown title="CV-výber" id="basic-nav-dropdown">
