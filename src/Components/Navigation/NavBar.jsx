@@ -29,7 +29,7 @@ const NavigationBar = () =>{
                          activeKey={window.location.pathname}
                          defaultActiveKey={"/cv"}>
                         <NavLink href="/cv" >O mne</NavLink>
-                        <NavLink href="/cv/vzdelanieeee" > Vzdelanieee</NavLink>
+                        <NavLink href="/cv/vzdelanie" > Vzdelanie</NavLink>
                         <NavLink href="/cv/skusenosti"> Pracovné skúsenosti</NavLink>
                         <NavLink href="/cv/znalosti" > Znalosti</NavLink>
                     </Nav>
