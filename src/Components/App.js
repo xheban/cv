@@ -8,7 +8,7 @@ import {CvContextProvider} from "../Helpers/CvContext";
 
 const App = () => {
     return (
-        <BrowserRouter basename={"/cv"}>
+        <BrowserRouter>
             <CvContextProvider>
             <NavigationBar/>
             <Routes>
