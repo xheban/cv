@@ -1,7 +1,7 @@
 import {Container, ListGroup, ProgressBar, Row} from "react-bootstrap";
 import './Skills.scss';
 import {useContext} from "react";
-import {CvContext} from "../../helpers/cvContext";
+import {CvContext} from "../../Helpers/CvContext";
 const Skills = () => {
     const { cv } = useContext(CvContext);
     const createSkillsList =() => {

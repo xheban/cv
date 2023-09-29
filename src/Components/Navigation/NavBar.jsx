@@ -1,8 +1,8 @@
 import {Nav, Container, Navbar, NavLink, NavDropdown} from "react-bootstrap"
 import './Navbar.scss';
-import {userData} from '../../Data/usersData'
+import {userData} from '../../Data/UsersData'
 import {useContext} from "react";
-import {CvContext} from "../../helpers/cvContext";
+import {CvContext} from "../../Helpers/CvContext";
 
 const NavigationBar = () =>{
     const { cv, setCv } = useContext(CvContext);
@@ -28,10 +28,10 @@ const NavigationBar = () =>{
                     <Nav className="me-auto" variant="underline"
                          activeKey={window.location.pathname}
                          defaultActiveKey={"/"}>
-                        <NavLink href="/" >O mne</NavLink>
-                        <NavLink href="/vzdelanie" > Vzdelanie</NavLink>
-                        <NavLink href="/skusenosti"> Pracovné skúsenosti</NavLink>
-                        <NavLink href="/znalosti" > Znalosti</NavLink>
+                        <NavLink href="/cv" >O mne</NavLink>
+                        <NavLink href="/cv/vzdelanie" > Vzdelanie</NavLink>
+                        <NavLink href="/cv/skusenosti"> Pracovné skúsenosti</NavLink>
+                        <NavLink href="/cv/znalosti" > Znalosti</NavLink>
                     </Nav>
                     <Nav className="ms-auto" variant="underline">
                         <NavDropdown title="CV-výber" id="basic-nav-dropdown">

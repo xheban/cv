@@ -4,7 +4,7 @@ import NavigationBar from "./Navigation/NavBar";
 import Education from "./EducationPage/Education";
 import Experience from "./ExperiencePage/Experience";
 import Skills from "./SkillsPage/Skills";
-import {CvContextProvider} from "../helpers/cvContext";
+import {CvContextProvider} from "../Helpers/CvContext";
 
 const App = () => {
     return (
@@ -12,10 +12,10 @@ const App = () => {
             <CvContextProvider>
             <NavigationBar/>
             <Routes>
-                <Route path="/" element={<AboutMe/>}/>
-                <Route path="/vzdelanie" element={<Education/>}/>
-                <Route path="/skusenosti" element={<Experience/>}/>
-                <Route path="/znalosti" element={<Skills/>}/>
+                <Route path="/cv" element={<AboutMe/>}/>
+                <Route path="/cv/vzdelanie" element={<Education/>}/>
+                <Route path="/cv/skusenosti" element={<Experience/>}/>
+                <Route path="/cv/znalosti" element={<Skills/>}/>
             </Routes>
             </CvContextProvider>
         </BrowserRouter>

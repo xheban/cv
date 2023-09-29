@@ -2,7 +2,7 @@ export const userData = [
     {
         id: 1,
         name: 'Michal Heban',
-        photoPath:'Images/foto.jpg',
+        photoPath:'foto.jpg',
         contact: {
             email: 'michal.heban52@gmail.com',
             telephone: '+421911138630',
@@ -70,7 +70,7 @@ export const userData = [
     {
         id: 2,
         name: 'Jožko Mrkvička',
-        photoPath:'Images/mrkvicka.jpg',
+        photoPath:'mrkvicka.jpg',
         contact: {
             email: 'jozko.mrkvicka@gmail.com',
             telephone: '+42190011223456',
@@ -145,7 +145,7 @@ export const userData = [
     {
         id: 3,
         name: 'Božena Hrašková',
-        photoPath:'Images/hrasok.jpg',
+        photoPath:'hrasok.jpg',
         contact: {
             email: 'bozena.hraskova@gmail.com',
             telephone: '+4219123456789',

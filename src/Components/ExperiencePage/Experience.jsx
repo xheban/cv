@@ -1,6 +1,6 @@
 import {Accordion, Container, Row} from "react-bootstrap";
 import {useContext} from "react";
-import {CvContext} from "../../helpers/cvContext";
+import {CvContext} from "../../Helpers/CvContext";
 const Experience = () => {
     const { cv } = useContext(CvContext);
     const createExperienceList =() => {

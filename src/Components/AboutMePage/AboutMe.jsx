@@ -1,13 +1,13 @@
 import {Col, Container, Row, Image} from "react-bootstrap";
 import {useContext} from "react";
-import {CvContext} from "../../helpers/cvContext";
+import {CvContext} from "../../Helpers/CvContext";
 const AboutMe = () => {
     const { cv } = useContext(CvContext);
     return (
         <Container>
             <Row className="pt-4">
                 <Col xs={12} sm={6}>
-                    <Image src={cv.photoPath} thumbnail/>
+                    <Image src={require(`../../StaticFiles/${cv.photoPath}`)} thumbnail/>
                 </Col>
                 <Col xs={12} sm={6}>
                     <h3> Kontakt: </h3>

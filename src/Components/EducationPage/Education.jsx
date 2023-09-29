@@ -1,6 +1,6 @@
 import {Accordion, Container, Row} from "react-bootstrap";
 import {useContext} from "react";
-import {CvContext} from "../../helpers/cvContext";
+import {CvContext} from "../../Helpers/CvContext";
 
 const Education = () => {
     const { cv } = useContext(CvContext);
