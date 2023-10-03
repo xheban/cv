@@ -1,12 +1,24 @@
 import {Col, Container, Form, Row} from "react-bootstrap";
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import './TicketSystem.scss'
+import {useSearchParams} from "react-router-dom";
 
 const TicketSystem = () => {
+
+    let [searchParams, setSearchParams] = useSearchParams();
 
     const [rowsMax, setRowsMax] = useState(10);
     const [seatsMax, setSeatsMax] = useState(20);
     const [listOfSelectedSeats, setListOfSelectedSeats] = useState([]);
+
+    useEffect( ()=>{
+        if((searchParams.get('rows'))){
+            setRowsMax(parseInt(searchParams.get('rows')));
+        }
+        if((searchParams.get('seats'))){
+            setSeatsMax(parseInt(searchParams.get('seats')));   
+        }
+    }, [searchParams])
 
     const filterSelectedSeats = (row,seatNumber) =>{
         setListOfSelectedSeats(
