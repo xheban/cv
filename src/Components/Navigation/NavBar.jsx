@@ -31,6 +31,7 @@ const NavigationBar = () =>{
                         <NavLink href="#/cv" >O mne</NavLink>
                         <NavLink href="#/cv/vzdelanie" > Vzdelanie</NavLink>
                         <NavLink href="#/cv/skusenosti"> Pracovné skúsenosti</NavLink>
+                        <NavLink href="#/cv/znalosti"> Znalosti</NavLink>
                         <NavDropdown title="CV-výber" id="basic-nav-dropdown">
                             {createCvList()}
                         </NavDropdown>
