@@ -122,7 +122,7 @@ const TicketSystem = () => {
         <Container>
             <Row className="pt-4">
                 <Col xs={9}>
-                    <Form>
+                    <Form className="formStyle">
                         {prepareRows(rowsMax,seatsMax)}
                     </Form>
                     <div style={{fontWeight: 'bold'}}> Počet vybraných miest: {listOfSelectedSeats.length} </div>
