@@ -11,3 +11,21 @@
     overflow-x: auto;
     white-space: nowrap;
 }
+
+.checkBoxPadding{
+    padding-right: 1rem !important;
+}
+
+.box {
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+}
+
+.ds-selected {
+    outline: 3px solid black;
+    outline-offset: 3px;
+    color: black;
+    font-weight: bold;
+}

@@ -1,12 +1,16 @@
 import {Col, Container, Form, Row} from "react-bootstrap";
-import React, {useEffect, useState} from 'react'
+import React,{ useEffect, useState} from 'react'
 import './TicketSystem.scss'
 import {useSearchParams} from "react-router-dom";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
+import $ from "jquery"
+
 
 const TicketSystem = () => {
 
-    let [searchParams, setSearchParams] = useSearchParams();
-
+    //TODO drag select
+    const [rowsOrder, setRowsOrder] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [rowsMax, setRowsMax] = useState(10);
     const [seatsMax, setSeatsMax] = useState(20);
     const [listOfSelectedSeats, setListOfSelectedSeats] = useState([]);
@@ -16,9 +20,29 @@ const TicketSystem = () => {
             setRowsMax(parseInt(searchParams.get('rows')));
         }
         if((searchParams.get('seats'))){
-            setSeatsMax(parseInt(searchParams.get('seats')));   
+            setSeatsMax(parseInt(searchParams.get('seats')));
         }
-    }, [searchParams])
+        let rowsOrderList = [];
+        for(let i = 1; i<= rowsMax; i++){
+            rowsOrderList.push(
+                {
+                    id: i,
+                    name: "Rad " + i
+                }
+            )
+        }
+        setRowsOrder(rowsOrderList);
+    }, [rowsMax, searchParams])
+
+    const onDragEnd = (result) => {
+        if (!result.destination) return;
+
+        const items = Array.from(rowsOrder);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+        setRowsOrder(items);
+    };
 
     const filterSelectedSeats = (row,seatNumber) =>{
         setListOfSelectedSeats(
@@ -42,11 +66,11 @@ const TicketSystem = () => {
         for (let l = 0; l <= j; l++) {
             if(l===0){
                 numbers.push(
-                    <div className="d-inline-block pe-4" style={{width: '84px'}} key={`${0}-${0}`}></div>
+                    <div className="d-inline-block" style={{width: '74px'}} key={`${0}-${0}`}></div>
                 )
             }else {
                 numbers.push(
-                    <div className="form-check form-check-inline form-check-reverse"
+                    <div className="d-inline-block me-2"
                          style={{width: '24px'}}
                          key={`${0}-${l}`}
                     >
@@ -59,51 +83,34 @@ const TicketSystem = () => {
         return numbers;
     }
 
-    const prepareSeatsInRow = (k,j) => {
+    const prepareSeatsInRow = (k,j,snapshot, maxVisibleSeats) => {
         let seatsInRowList = [];
-        for (let l = 0; l <= j; l++) {
-            if(l===0){
-                seatsInRowList.push(
-                    <div className="d-inline-block pe-4" style={{width: '75px'}} key={`${k}-${l}`}> Rad  {k} </div>
-                )
-            }else {
-                seatsInRowList.push(
-                    <Form.Check
-                            key={`${k}-${l}`}
-                            inline
-                            reverse
-                            label=""
-                            name="group1"
-                            type="checkbox"
-                            id={`${k}-${l}`}
-                            onChange={e => handleChange(e)}
-                    />
-                )
+        for (let l = 1; l <= j; l++) {
+            let visibility = 'visible'
+            if(maxVisibleSeats){
+                if(maxVisibleSeats < l && snapshot.isDragging){
+                    visibility = 'hidden';
+                }
+
             }
+            seatsInRowList.push(
+                <Form.Check
+                        className="checkBoxPadding widget"
+                        key={`${k}-${l}`}
+                        inline
+                        reverse
+                        label=""
+                        name="group1"
+                        type="checkbox"
+                        id={`${k}-${l}`}
+                        style={{visibility: visibility}}
+                        onChange={e => handleChange(e)}
+                />
+            )
 
         }
         return seatsInRowList;
     }
-
-    const prepareRows = (i,j) => {
-        let seatsList = [];
-        for (let k = 0; k <= i; k++) {
-            if (k === 0) {
-                seatsList.push(
-                    <div key={`${k}`} className="mb-2">
-                        {prepareNumbering(j)}
-                    </div>
-                )
-            } else{
-                seatsList.push(
-                    <div key={`${k}`} className="mb-2">
-                        {prepareSeatsInRow(k, j)}
-                    </div>
-                )
-            }
-        }
-        return seatsList;
-    };
 
     const handleDeleteSeat = (row,seatNumber) =>{
         filterSelectedSeats(row,seatNumber);
@@ -134,13 +141,50 @@ const TicketSystem = () => {
         <Container>
             <Row className="pt-4">
                 <Col xs={9}>
-                    <Form className="formStyle">
-                        {prepareRows(rowsMax,seatsMax)}
-                    </Form>
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="tasks">
+                            {(provided) => (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                    <div className="formStyle" id="checkArea">
+                                        <div className="pb-2">
+                                            {prepareNumbering(seatsMax)}
+                                        </div>
+                                        {rowsOrder.map((row, index) => (
+                                            <Draggable
+                                                key={row.id}
+                                                draggableId={row.id.toString()}
+                                                index={index}
+                                            >
+                                                {(provided,snapshot) => {
+                                                    let maxVisibleSeats = Math.ceil(($("#checkArea").width() -74) / 32);
+                                                    return (
+                                                        <div
+                                                            {...provided.draggableProps}
+                                                            ref={provided.innerRef}
+                                                        >
+                                                            <div className="pb-2">
+                                                                <div
+                                                                    {...provided.dragHandleProps}
+                                                                    className="d-inline-block" style={{width: '64px'}}>
+                                                                    {row.name}
+                                                                </div>
+                                                                {prepareSeatsInRow(row.id, seatsMax, snapshot, maxVisibleSeats)}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }}
+                                            </Draggable>
+                                        ))}
+                                        {provided.placeholder}
+                                    </div>
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
                     <div style={{fontWeight: 'bold'}}> Počet vybraných miest: {listOfSelectedSeats.length} </div>
                 </Col>
                 <Col xs={3}>
-                    <div style={{fontWeight: 'bold'}}> Kúpene listky: </div>
+                    <div style={{fontWeight: 'bold'}} id="test"> Kúpene listky: </div>
                     {prepareBoughtTickets()}
                 </Col>
             </Row>

@@ -6,6 +6,7 @@ import Experience from "./ExperiencePage/Experience";
 import Skills from "./SkillsPage/Skills";
 import {CvContextProvider} from "../Helpers/CvContext";
 import TicketSystem from "./TicketSystem/TicketSystem";
+import TestApp from "./Test/TestApp";
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
                 <Route path="/cv/skusenosti" element={<Experience/>}/>
                 <Route path="/cv/znalosti" element={<Skills/>}/>
                 <Route path="/cv/ticket" element={<TicketSystem/>}/>
+                <Route path="/cv/test" element={<TestApp/>}/>
             </Routes>
             </CvContextProvider>
         </HashRouter>

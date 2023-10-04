@@ -1,0 +1,15 @@
+.mouse-select__selectable {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  background: gray;
+}
+
+.mouse-select__selectable .selected {
+  border: 2px solid red;
+}
+
+.mouse-select__frame {
+  background: red;
+  opacity: 0.5;
+}
