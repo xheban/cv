@@ -12,6 +12,12 @@
     white-space: nowrap;
 }
 
+@media (min-width: 768px) {
+    .boughtTicketsStyle {
+        overflow-y: auto;
+    }
+}
+
 .checkBoxPadding{
     padding-right: 1rem !important;
 }
@@ -28,4 +34,20 @@
     outline-offset: 3px;
     color: black;
     font-weight: bold;
+}
+
+.disable-text-selection{
+    -moz-user-select:none; /* firefox */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE*/
+    user-select: none; /* Standard syntax */
+}
+
+.rect {
+    position: absolute;
+    border: 2px solid rgba(199, 25, 9, 0.64);
+    -webkit-user-select: none;  /* Chrome, Safari, Opera */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none;
 }
