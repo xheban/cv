@@ -1,21 +1,71 @@
-import {Col, Container, Form, Row} from "react-bootstrap";
+import { Col, Container, Form, Row} from "react-bootstrap";
 import React, {useCallback, useEffect, useState} from 'react'
 import './TicketSystem.scss'
-import {useSearchParams} from "react-router-dom";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import $ from "jquery"
-import {queries} from "@testing-library/react";
+
 
 
 const TicketSystem = () => {
     const [mouseCoordinatesDown, setMouseCoordinatesDown] = useState({x:0, y:0, scroll: 0});
-    console.log('rerender');
-
-    //TODO drag select
     const [rowsOrder, setRowsOrder] = useState([]);
-    const [rowsMax, setRowsMax] = useState(8);
-    const [seatsMax, setSeatsMax] = useState(25);
+    const [rowsMax, setRowsMax] = useState('10');
+    const [seatsMax, setSeatsMax] = useState('20');
     const [listOfSelectedSeats, setListOfSelectedSeats] = useState([]);
+
+    useEffect( ()=>{
+        if(localStorage.getItem('Rows') !== null){
+            setRowsMax(localStorage.getItem('Rows'))
+        }
+        if(localStorage.getItem('Seats') !== null){
+            setSeatsMax(localStorage.getItem('Seats'))
+        }
+        if(localStorage.getItem('RowsOrder') !== null){
+            setRowsOrder(JSON.parse(localStorage.getItem('RowsOrder')));
+        }else{
+            let rowsOrderList = [];
+            for(let i = 1; i<= rowsMax; i++){
+                rowsOrderList.push(
+                    {
+                        id: i,
+                        name: "Rad " + i
+                    }
+                )
+            }
+            setRowsOrder(rowsOrderList);
+        }
+    }, [rowsMax])
+
+    const onChangeSeats =(e) =>{
+        setSeatsMax(e.target.value);
+        localStorage.setItem('Seats', e.target.value);
+        if(parseInt(e.target.value) < parseInt(seatsMax)) {
+            let newSeats = listOfSelectedSeats.filter(list => {
+                return list.seatNumber !== seatsMax;
+            })
+            setListOfSelectedSeats(newSeats)
+        }
+
+    }
+    const onChangeRows =(e) =>{
+        let newRowsOrder;
+        if(parseInt(e.target.value) > parseInt(rowsMax)){
+            newRowsOrder = structuredClone(rowsOrder);
+            newRowsOrder[rowsOrder.length] = {id: rowsOrder.length+1, name: `Rad ${rowsOrder.length+1}` };
+        }else{
+            newRowsOrder = structuredClone(rowsOrder).filter(row => {
+                return row.id !== parseInt(rowsMax);
+            })
+            let newSeats = listOfSelectedSeats.filter(list => {
+                return list.row !== rowsMax;
+            })
+            setListOfSelectedSeats(newSeats)
+        }
+        localStorage.setItem('RowsOrder',JSON.stringify(structuredClone(newRowsOrder)));
+        localStorage.setItem('Rows', e.target.value);
+        setRowsOrder(newRowsOrder);
+        setRowsMax(e.target.value);
+    }
 
     const checkIfSelected = useCallback((x,y,scroll) =>{
         if(mouseCoordinatesDown.x !== x && mouseCoordinatesDown.y !== y){
@@ -52,7 +102,6 @@ const TicketSystem = () => {
     },[listOfSelectedSeats, mouseCoordinatesDown, rowsMax, seatsMax])
 
     const mouseHandlerDown =(event) => {
-        console.log("there");
         setMouseCoordinatesDown({
             x:event.clientX,
             y:event.clientY,
@@ -73,19 +122,6 @@ const TicketSystem = () => {
         })
     }, [mouseHandlerUp])
 
-    useEffect( ()=>{
-        let rowsOrderList = [];
-        for(let i = 1; i<= rowsMax; i++){
-            rowsOrderList.push(
-                {
-                    id: i,
-                    name: "Rad " + i
-                }
-            )
-        }
-        setRowsOrder(rowsOrderList);
-    }, [rowsMax])
-
     const onDragEnd = (result) => {
         if (!result.destination) return;
 
@@ -94,20 +130,22 @@ const TicketSystem = () => {
         items.splice(result.destination.index, 0, reorderedItem);
 
         setRowsOrder(items);
+        localStorage.setItem('RowsOrder',JSON.stringify(items));
     };
 
     const filterSelectedSeats = (row,seatNumber) =>{
-        setListOfSelectedSeats(
-            listOfSelectedSeats.filter(a =>
-                a.row !== row || a.seatNumber !== seatNumber
-            )
+        let newSeats = listOfSelectedSeats.filter(a =>
+            a.row !== row || a.seatNumber !== seatNumber
         )
+        setListOfSelectedSeats(newSeats)
     }
 
     const handleChange = (e) =>{
         const seat = e.target.id.split('-');
         if(e.target.checked){
-            setListOfSelectedSeats([...listOfSelectedSeats, {row: seat[0], seatNumber: seat[1]}]);
+            let newSeats = structuredClone(listOfSelectedSeats);
+            newSeats[listOfSelectedSeats.length] = {row: seat[0], seatNumber: seat[1]};
+            setListOfSelectedSeats(newSeats);
         }else{
             filterSelectedSeats(seat[0], seat[1]);
         }
@@ -192,6 +230,22 @@ const TicketSystem = () => {
     return (
         <Container>
             <Row className="pt-4">
+                <Form>
+                    <Col md={2} sm={3} xs={6} className="d-inline-block me-4">
+                        <Form.Group className="mb-3" controlId="formRows">
+                            <Form.Label className="disable-text-selection">Počet radov</Form.Label>
+                            <Form.Control type="number" value={rowsMax} onChange={onChangeRows}/>
+                        </Form.Group>
+                    </Col>
+                    <Col md={2} sm={3} xs={6} className="d-inline-block me-4">
+                       <Form.Group className="mb-3" controlId="formSeats">
+                           <Form.Label className="disable-text-selection">Počet sedadiel</Form.Label>
+                           <Form.Control type="number" value={seatsMax} onChange={onChangeSeats}/>
+                       </Form.Group>
+                    </Col>
+                </Form>
+            </Row>
+            <Row className="pt-4">
                 <Col md={9} sm={12}>
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="tasks">
@@ -232,9 +286,9 @@ const TicketSystem = () => {
                             )}
                         </Droppable>
                     </DragDropContext>
-                    <div style={{fontWeight: 'bold'}} className="disable-text-selection"> Počet vybraných miest: {listOfSelectedSeats.length} </div>
+                    <div style={{fontWeight: 'bold'}} className="disable-text-selection pb-1"> Počet vybraných miest: {listOfSelectedSeats.length} </div>
                 </Col>
-                <Col md={3} sm={12} style={{height:  `${$("#checkArea").height()}px`}} className="pt-sm-2 boughtTicketsStyle">
+                <Col md={3} sm={12} style={{height:  `${$("#checkArea").height()}px`}} className="boughtTicketsStyle">
                     <div style={{fontWeight: 'bold'}} id="test" className="disable-text-selection"> Kúpene listky: </div>
                     {prepareBoughtTickets()}
                 </Col>

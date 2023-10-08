@@ -38,7 +38,6 @@ const NavigationBar = () =>{
                     </Nav>
                     <Nav className="ms-auto" variant="underline">
                         <Button href="#/cv/ticket" > Tickety-úloha</Button>
-                        <Button href="#/cv/test" > Test</Button>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
