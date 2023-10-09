@@ -1,12 +1,23 @@
-import { Col, Container, Form, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import React, {useCallback, useEffect, useState} from 'react'
 import './TicketSystem.scss'
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import $ from "jquery"
+import {useForm} from "react-hook-form";
 
 
 
 const TicketSystem = () => {
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const onSubmit = data => {
+        if(data.Rows !== rowsMax && data.Rows !== '' ){
+            onChangeRows(data.Rows);
+        }
+        if(data.Seats !== seatsMax && data.Seats !== ''){
+            onChangeSeats(data.Seats);
+        }
+    }
+
     const [mouseCoordinatesDown, setMouseCoordinatesDown] = useState({x:0, y:0, scroll: 0});
     const [rowsOrder, setRowsOrder] = useState([]);
     const [rowsMax, setRowsMax] = useState('10');
@@ -36,35 +47,37 @@ const TicketSystem = () => {
         }
     }, [rowsMax])
 
-    const onChangeSeats =(e) =>{
-        setSeatsMax(e.target.value);
-        localStorage.setItem('Seats', e.target.value);
-        if(parseInt(e.target.value) < parseInt(seatsMax)) {
+    const onChangeSeats =(seats) =>{
+        setSeatsMax(seats);
+        localStorage.setItem('Seats', seats);
+        if(parseInt(seats) < parseInt(seatsMax)) {
             let newSeats = listOfSelectedSeats.filter(list => {
-                return list.seatNumber !== seatsMax;
+                return parseInt(list.seatNumber) <= parseInt(seats);
             })
             setListOfSelectedSeats(newSeats)
         }
 
     }
-    const onChangeRows =(e) =>{
+    const onChangeRows =(rows) =>{
         let newRowsOrder;
-        if(parseInt(e.target.value) > parseInt(rowsMax)){
+        if(parseInt(rows) > parseInt(rowsMax)){
             newRowsOrder = structuredClone(rowsOrder);
-            newRowsOrder[rowsOrder.length] = {id: rowsOrder.length+1, name: `Rad ${rowsOrder.length+1}` };
+            for(let i = rowsOrder.length; i < parseInt(rows); i++){
+                newRowsOrder[i] = {id: i+1, name: `Rad ${i+1}` };
+            }
         }else{
             newRowsOrder = structuredClone(rowsOrder).filter(row => {
-                return row.id !== parseInt(rowsMax);
+                return parseInt(row.id) <= parseInt(rows);
             })
             let newSeats = listOfSelectedSeats.filter(list => {
-                return list.row !== rowsMax;
+                return parseInt(list.row) <= parseInt(rows);
             })
             setListOfSelectedSeats(newSeats)
         }
         localStorage.setItem('RowsOrder',JSON.stringify(structuredClone(newRowsOrder)));
-        localStorage.setItem('Rows', e.target.value);
+        localStorage.setItem('Rows', rows);
         setRowsOrder(newRowsOrder);
-        setRowsMax(e.target.value);
+        setRowsMax(rows);
     }
 
     const checkIfSelected = useCallback((x,y,scroll) =>{
@@ -99,7 +112,7 @@ const TicketSystem = () => {
                 }
             });
         }
-    },[listOfSelectedSeats, mouseCoordinatesDown, rowsMax, seatsMax])
+    },[mouseCoordinatesDown, rowsMax, seatsMax])
 
     const mouseHandlerDown =(event) => {
         setMouseCoordinatesDown({
@@ -230,20 +243,37 @@ const TicketSystem = () => {
     return (
         <Container>
             <Row className="pt-4">
-                <Form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <Col md={2} sm={3} xs={6} className="d-inline-block me-4">
                         <Form.Group className="mb-3" controlId="formRows">
                             <Form.Label className="disable-text-selection">Počet radov</Form.Label>
-                            <Form.Control type="number" value={rowsMax} onChange={onChangeRows}/>
+                            <Form.Control type="number" {...register("Rows", { min: 1, max: 99 })}/>
                         </Form.Group>
                     </Col>
                     <Col md={2} sm={3} xs={6} className="d-inline-block me-4">
-                       <Form.Group className="mb-3" controlId="formSeats">
-                           <Form.Label className="disable-text-selection">Počet sedadiel</Form.Label>
-                           <Form.Control type="number" value={seatsMax} onChange={onChangeSeats}/>
-                       </Form.Group>
+                        <Form.Group className="mb-3" controlId="formSeats">
+                            <Form.Label className="disable-text-selection">Počet radov</Form.Label>
+                            <Form.Control type="number" {...register("Seats", { min: 1, max: 99 })}/>
+                        </Form.Group>
                     </Col>
-                </Form>
+                    <Button variant="primary" type="submit">
+                        Zmeň
+                    </Button>
+                </form>
+                {/*<Form>*/}
+                {/*    <Col md={2} sm={3} xs={6} className="d-inline-block me-4">*/}
+                {/*        <Form.Group className="mb-3" controlId="formRows">*/}
+                {/*            <Form.Label className="disable-text-selection">Počet radov</Form.Label>*/}
+                {/*            <Form.Control type="number" value={rowsMax} onChange={onChangeRows}/>*/}
+                {/*        </Form.Group>*/}
+                {/*    </Col>*/}
+                {/*    <Col md={2} sm={3} xs={6} className="d-inline-block me-4">*/}
+                {/*       <Form.Group className="mb-3" controlId="formSeats">*/}
+                {/*           <Form.Label className="disable-text-selection">Počet sedadiel</Form.Label>*/}
+                {/*           <Form.Control type="number" value={seatsMax} onChange={onChangeSeats}/>*/}
+                {/*       </Form.Group>*/}
+                {/*    </Col>*/}
+                {/*</Form>*/}
             </Row>
             <Row className="pt-4">
                 <Col md={9} sm={12}>
